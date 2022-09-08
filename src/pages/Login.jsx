@@ -14,7 +14,9 @@ class Login extends Component {
       if (player && playerEmail) {
         this.setState({ isDisabled: false });
       } else {
-        this.setState({ isDisabled: true });
+        this.setState({
+          isDisabled: true,
+        });
       }
     });
   };
