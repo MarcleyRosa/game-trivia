@@ -36,7 +36,6 @@ class Login extends Component {
     }, () => {
       history.push('/game');
     });
-    console.log(token);
   };
 
   render() {
