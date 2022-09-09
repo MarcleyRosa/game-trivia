@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { loginAction } from '../redux/actions';
 import getToken from '../fetchAPI';
 
 class Login extends Component {
@@ -8,6 +11,7 @@ class Login extends Component {
     playerEmail: '',
     isDisabled: true,
     token: '',
+    shouldRedirect: false,
   };
 
   handleChange = ({ target }) => {
@@ -17,9 +21,7 @@ class Login extends Component {
       if (player && playerEmail) {
         this.setState({ isDisabled: false });
       } else {
-        this.setState({
-          isDisabled: true,
-        });
+        this.setState({ isDisabled: true });
       }
     });
   };
@@ -28,19 +30,27 @@ class Login extends Component {
     const tokenInfos = await getToken();
     const { token } = tokenInfos;
 
+    const { player, playerEmail } = this.state;
+    const { logPlayer } = this.props;
+    logPlayer(player, playerEmail);
+
     localStorage.setItem('token', token);
 
-    const { history } = this.props;
     this.setState({
       token,
-    }, () => {
-      history.push('/game');
+      shouldRedirect: true,
     });
   };
 
+  goToSettings = () => {
+    const { history } = this.props;
+    history.push('/configurações');
+  };
+
   render() {
-    const { player, playerEmail, isDisabled, token } = this.state;
+    const { player, playerEmail, isDisabled, shouldRedirect, token } = this.state;
     console.log(token);
+
     return (
       <form>
         <label htmlFor="player">
@@ -73,13 +83,26 @@ class Login extends Component {
         >
           Play
         </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.goToSettings }
+        >
+          Configurações
+        </button>
+        {shouldRedirect && <Redirect to="/game" />}
       </form>
     );
   }
 }
 
 Login.propTypes = {
-  history: PropTypes.shape([PropTypes.object]).isRequired,
+  logPlayer: PropTypes.func.isRequired,
+  history: PropTypes.func.isRequired,
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  logPlayer: (player, playerEmail) => dispatch(loginAction(player, playerEmail)),
+});
+
+export default connect(null, mapDispatchToProps)(Login);
