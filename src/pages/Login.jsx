@@ -98,7 +98,7 @@ class Login extends Component {
 
 Login.propTypes = {
   logPlayer: PropTypes.func.isRequired,
-  history: PropTypes.func.isRequired,
+  history: PropTypes.shape([PropTypes.object]).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
