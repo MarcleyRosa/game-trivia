@@ -19,9 +19,7 @@ class Login extends Component {
       if (player && playerEmail) {
         this.setState({ isDisabled: false });
       } else {
-        this.setState({
-          isDisabled: true,
-        });
+        this.setState({ isDisabled: true });
       }
     });
   };
@@ -33,6 +31,11 @@ class Login extends Component {
     this.setState({
       shouldRedirect: true,
     });
+  };
+
+  goToSettings = () => {
+    const { history } = this.props;
+    history.push('/configurações');
   };
 
   render() {
@@ -69,6 +72,13 @@ class Login extends Component {
         >
           Play
         </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.goToSettings }
+        >
+          Configurações
+        </button>
         {shouldRedirect && <Redirect to="/game" />}
       </form>
     );
@@ -77,6 +87,7 @@ class Login extends Component {
 
 Login.propTypes = {
   logPlayer: PropTypes.func.isRequired,
+  history: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
