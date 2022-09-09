@@ -1,3 +1,5 @@
+import { LOG_IN } from '../actions';
+
 const INITIAL_STATE = {
   name: '',
   assertions: 0,
@@ -7,9 +9,11 @@ const INITIAL_STATE = {
 
 const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case 'PLAYER_INFOS':
+  case LOG_IN:
     return {
       ...state,
+      name: action.name,
+      gravatarEmail: action.email,
     };
   default: return state;
   }
