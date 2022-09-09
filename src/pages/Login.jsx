@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import getToken from '../fetchAPI';
 
 class Login extends Component {
   state = {
     player: '',
     playerEmail: '',
     isDisabled: true,
+    token: '',
   };
 
   handleChange = ({ target }) => {
@@ -21,8 +24,24 @@ class Login extends Component {
     });
   };
 
+  handleClick = async () => {
+    const tokenInfos = await getToken();
+    const { token } = tokenInfos;
+
+    localStorage.setItem('token', token);
+
+    const { history } = this.props;
+    this.setState({
+      token,
+    }, () => {
+      history.push('/game');
+    });
+    console.log(token);
+  };
+
   render() {
-    const { player, playerEmail, isDisabled } = this.state;
+    const { player, playerEmail, isDisabled, token } = this.state;
+    console.log(token);
     return (
       <form>
         <label htmlFor="player">
@@ -51,6 +70,7 @@ class Login extends Component {
           type="button"
           disabled={ isDisabled }
           data-testid="btn-play"
+          onClick={ this.handleClick }
         >
           Play
         </button>
@@ -58,5 +78,9 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape([PropTypes.object]).isRequired,
+};
 
 export default Login;
