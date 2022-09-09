@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends Component {
   state = {
@@ -14,11 +15,14 @@ class Login extends Component {
       if (player && playerEmail) {
         this.setState({ isDisabled: false });
       } else {
-        this.setState({
-          isDisabled: true,
-        });
+        this.setState({ isDisabled: true });
       }
     });
+  };
+
+  goToSettings = () => {
+    const { history } = this.props;
+    history.push('/configurações');
   };
 
   render() {
@@ -54,9 +58,20 @@ class Login extends Component {
         >
           Play
         </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.goToSettings }
+        >
+          Configurações
+        </button>
       </form>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.func.isRequired,
+};
 
 export default Login;
