@@ -26,7 +26,7 @@ Game.propTypes = {
 const mapStateToProps = (state) => ({
   player: state.player.name,
   score: state.player.score,
-  email: state.player.gravatarEmail.value,
+  email: state.player.gravatarEmail,
 });
 
 export default connect(mapStateToProps, null)(Game);

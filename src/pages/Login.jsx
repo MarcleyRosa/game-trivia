@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { loginAction } from '../redux/actions';
+import getToken from '../fetchAPI';
 
 class Login extends Component {
   state = {
     player: '',
     playerEmail: '',
     isDisabled: true,
+    token: '',
     shouldRedirect: false,
   };
 
@@ -24,11 +26,18 @@ class Login extends Component {
     });
   };
 
-  onButtonClick = () => {
-    const { player } = this.state;
+  handleClick = async () => {
+    const tokenInfos = await getToken();
+    const { token } = tokenInfos;
+
+    const { player, playerEmail } = this.state;
     const { logPlayer } = this.props;
     logPlayer(player, playerEmail);
+
+    localStorage.setItem('token', token);
+
     this.setState({
+      token,
       shouldRedirect: true,
     });
   };
@@ -39,7 +48,9 @@ class Login extends Component {
   };
 
   render() {
-    const { player, playerEmail, isDisabled, shouldRedirect } = this.state;
+    const { player, playerEmail, isDisabled, shouldRedirect, token } = this.state;
+    console.log(token);
+
     return (
       <form>
         <label htmlFor="player">
@@ -68,7 +79,7 @@ class Login extends Component {
           type="button"
           disabled={ isDisabled }
           data-testid="btn-play"
-          onClick={ this.onButtonClick }
+          onClick={ this.handleClick }
         >
           Play
         </button>
@@ -91,7 +102,7 @@ Login.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  logPlayer: (player) => dispatch(loginAction(player, playerEmail)),
+  logPlayer: (player, playerEmail) => dispatch(loginAction(player, playerEmail)),
 });
 
 export default connect(null, mapDispatchToProps)(Login);
