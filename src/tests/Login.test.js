@@ -1,6 +1,6 @@
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import App from '../App';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('Test component Login', () => {
@@ -12,7 +12,7 @@ describe('Test component Login', () => {
         //     token: 'e9623a0d396d372d804165ef5c4e159d04387c89e3571135b7695671056cf5bb'
         // }
 
-        renderWithRouterAndRedux(<App />)
+        const { history } = renderWithRouterAndRedux(<App />)
 
         const email = 'test@jest.com'
         const name = 'First Player'
@@ -31,6 +31,8 @@ describe('Test component Login', () => {
         expect(buttonGame).toBeInTheDocument();
 
         userEvent.click(buttonGame);
+
+        await waitFor(() => expect(history.location.pathname).toBe('/game'))
 
     })
     it('Test button game and route', async () => {
