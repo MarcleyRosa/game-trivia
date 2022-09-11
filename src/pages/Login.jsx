@@ -44,7 +44,7 @@ class Login extends Component {
 
   goToSettings = () => {
     const { history } = this.props;
-    history.push('/configurações');
+    history.push('/settings');
   };
 
   render() {
