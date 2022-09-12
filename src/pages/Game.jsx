@@ -11,6 +11,8 @@ class Game extends Component {
     indexClick: 0,
     isAnswered: false,
     scrambledQuestions: [0],
+    timeCount: 30,
+    isDisabled: false,
   };
 
   async componentDidMount() {
@@ -25,12 +27,15 @@ class Game extends Component {
       const { history } = this.props;
       history.push('/');
     }
+    this.timeQuestion();
   }
 
   handleQuest = () => {
     this.setState((prevState) => ({
       indexClick: prevState.indexClick + 1,
       isAnswered: false,
+      timeCount: 30,
+      isDisabled: false,
     }), () => {
       this.scrambledQuest();
     });
@@ -42,6 +47,7 @@ class Game extends Component {
 
       });
     }
+    this.timeQuestion();
   };
 
   scrambledQuest = () => {
@@ -63,10 +69,14 @@ class Game extends Component {
     return arr;
   };
 
-  chosenQuestion = () => {
+  chosenQuestion = ({ target }) => {
+    const { timeCount } = this.state;
     this.setState({
       isAnswered: true,
+    }, () => {
+      console.log(target.className);
     });
+    console.log(timeCount);
   };
 
   identifyCorrect = (index, correct, wrong) => {
@@ -75,12 +85,32 @@ class Game extends Component {
        === scrambledQuestions[indexClick][index] ? correct : wrong);
   };
 
+  timeQuestion = () => {
+    const timeMaxQuestion = 30;
+    const timeInterval = 1000;
+
+    let count = timeMaxQuestion;
+
+    const interval = setInterval(() => {
+      count -= 1;
+      if (count === 0) {
+        clearInterval(interval);
+        this.setState({
+          isDisabled: true,
+        });
+      }
+
+      this.setState({
+        timeCount: count,
+      });
+    }, timeInterval);
+  };
+
   render() {
     const { player, score, email } = this.props;
-    const { questions, indexClick, isAnswered, scrambledQuestions } = this.state;
+    const { questions, indexClick, isAnswered,
+      scrambledQuestions, timeCount, isDisabled } = this.state;
     const hash = md5(email).toString();
-
-    console.log(scrambledQuestions);
 
     return (
       <div>
@@ -91,6 +121,7 @@ class Game extends Component {
           <div>
             <p data-testid="question-category">{questions[indexClick].category}</p>
             <p data-testid="question-text">{questions[indexClick].question}</p>
+            <p>{ timeCount }</p>
             <div data-testid="answer-options">
 
               { questions.map((quest, index) => (
@@ -98,6 +129,7 @@ class Game extends Component {
                   <button
                     key={ quest.question }
                     onClick={ this.chosenQuestion }
+                    disabled={ isDisabled }
                     className={ isAnswered
                       ? this.identifyCorrect(index, 'correct', 'wrong') : 'test' }
                     type="button"
