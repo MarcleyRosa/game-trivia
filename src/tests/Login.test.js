@@ -6,12 +6,6 @@ import userEvent from '@testing-library/user-event';
 describe('Test component Login', () => {
     it('Test inputs and button ', async () => {
 
-        // const mockData = {
-        //     response_code: 0,
-        //     response_message: 'Token Generated Successfully!',
-        //     token: 'e9623a0d396d372d804165ef5c4e159d04387c89e3571135b7695671056cf5bb'
-        // }
-
         const { history } = renderWithRouterAndRedux(<App />)
 
         const email = 'test@jest.com'
