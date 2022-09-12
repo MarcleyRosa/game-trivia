@@ -1,4 +1,4 @@
-import { LOG_IN, NEW_SCORE } from '../actions';
+import { LOG_IN, NEW_ASSERTIONS, NEW_SCORE } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -19,6 +19,11 @@ const playerReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: state.score + action.state,
+    };
+  case NEW_ASSERTIONS:
+    return {
+      ...state,
+      assertions: action.state,
     };
   default: return state;
   }
