@@ -13,6 +13,11 @@ class Feedback extends Component {
     this.setState({ shouldRedirect: true });
   };
 
+  handleRankingButtonClick = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { score, assertions } = this.props;
     const { shouldRedirect } = this.state;
@@ -33,6 +38,13 @@ class Feedback extends Component {
         >
           Play Again
         </button>
+        <button
+          onClick={ this.handleRankingButtonClick }
+          type="button"
+          data-testid="btn-ranking"
+        >
+          Ranking
+        </button>
         { shouldRedirect && <Redirect to="/" /> }
       </div>
     );
@@ -42,6 +54,7 @@ class Feedback extends Component {
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  history: PropTypes.shape([PropTypes.object]).isRequired,
 };
 
 const mapStateToProps = (state) => ({
