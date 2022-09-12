@@ -149,6 +149,11 @@ class Game extends Component {
     });
   };
 
+  handleRankingButtonClick = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { player, score, email } = this.props;
     const { questions, indexClick, isAnswered,
@@ -196,6 +201,13 @@ class Game extends Component {
                 Next
 
               </button>)}
+            <button
+              onClick={ this.handleRankingButtonClick }
+              type="button"
+              data-testid="btn-ranking"
+            >
+              Ranking
+            </button>
           </div>
 
         ) : (<p>Loading</p>)}
