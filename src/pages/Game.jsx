@@ -43,12 +43,14 @@ class Game extends Component {
       this.scrambledQuest();
     });
     const { indexClick } = this.state;
+    const { history } = this.props;
     const maxNumberQuestion = 4;
     if (indexClick === maxNumberQuestion) {
       this.setState({
         indexClick: 0,
 
       });
+      history.push('/feedback');
     }
     this.timeQuestion();
   };
@@ -151,9 +153,8 @@ class Game extends Component {
     const { player, score, email } = this.props;
     const { questions, indexClick, isAnswered,
       scrambledQuestions, timeCount, isDisabled } = this.state;
-    const hash = md5(email).toString();
 
-    console.log(questions);
+    const hash = md5(email).toString();
 
     return (
       <div>
@@ -186,7 +187,15 @@ class Game extends Component {
                 )
               ))}
             </div>
-            <button onClick={ this.handleQuest } type="button">Next</button>
+            { isAnswered && (
+              <button
+                onClick={ this.handleQuest }
+                data-testid="btn-next"
+                type="button"
+              >
+                Next
+
+              </button>)}
           </div>
 
         ) : (<p>Loading</p>)}
