@@ -21,8 +21,6 @@ Header.propTypes = {
   player: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
   email: PropTypes.string.isRequired,
-  // history: PropTypes.shape([PropTypes.object]).isRequired,
-
 };
 
 const mapStateToProps = (state) => ({
