@@ -114,12 +114,6 @@ class Game extends Component {
         default: return pointFix + (timeCount * easy);
         }
       }
-
-      // console.log(target.className);
-
-      // console.log(timeCount);
-      // console.log(questions);
-      // console.log(questions[indexClick].difficulty);
     });
   };
 
@@ -207,7 +201,7 @@ Game.propTypes = {
   score: PropTypes.number.isRequired,
   email: PropTypes.string.isRequired,
   history: PropTypes.shape([PropTypes.object]).isRequired,
-
+  resultScore: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
