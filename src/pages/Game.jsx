@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import md5 from 'crypto-js/md5';
+import '../App.css';
 import getQuestions from '../fetchQuestions';
 
 class Game extends Component {
   state = {
     questions: [],
     indexClick: 0,
-
+    isAnswered: false,
+    scrambledQuestions: [0],
   };
 
   async componentDidMount() {
     const token = localStorage.getItem('token');
     const questions = await getQuestions(token);
-    this.setState({ questions: questions.results });
+    this.setState({ questions: questions.results }, () => {
+      this.scrambledQuest();
+    });
     const limitTime = 3;
     if (questions.response_code === limitTime) {
       localStorage.removeItem('token');
@@ -26,7 +30,10 @@ class Game extends Component {
   handleQuest = () => {
     this.setState((prevState) => ({
       indexClick: prevState.indexClick + 1,
-    }));
+      isAnswered: false,
+    }), () => {
+      this.scrambledQuest();
+    });
     const { indexClick } = this.state;
     const maxNumberQuestion = 4;
     if (indexClick === maxNumberQuestion) {
@@ -34,6 +41,17 @@ class Game extends Component {
         indexClick: 0,
       });
     }
+  };
+
+  scrambledQuest = () => {
+    const { questions } = this.state;
+    const scrambled = questions
+      .map((quest) => [...quest.incorrect_answers, quest.correct_answer])
+      .map((rand) => this.shuffleArray(rand));
+
+    this.setState({
+      scrambledQuestions: scrambled,
+    });
   };
 
   shuffleArray = (arr) => {
@@ -44,14 +62,24 @@ class Game extends Component {
     return arr;
   };
 
+  chosenQuestion = () => {
+    this.setState({
+      isAnswered: true,
+    });
+  };
+
+  identifyCorrect = (index, correct, wrong) => {
+    const { questions, indexClick, scrambledQuestions } = this.state;
+    return (questions[indexClick].correct_answer
+       === scrambledQuestions[indexClick][index] ? correct : wrong);
+  };
+
   render() {
     const { player, score, email } = this.props;
-    const { questions, indexClick } = this.state;
+    const { questions, indexClick, isAnswered, scrambledQuestions } = this.state;
     const hash = md5(email).toString();
 
-    const randQuestions = questions
-      .map((quest) => [...quest.incorrect_answers, quest.correct_answer])
-      .map((rand) => this.shuffleArray(rand));
+    console.log(scrambledQuestions);
 
     return (
       <div>
@@ -65,15 +93,19 @@ class Game extends Component {
             <div data-testid="answer-options">
 
               { questions.map((quest, index) => (
-                index < randQuestions[indexClick].length && (
+                index < scrambledQuestions[indexClick].length && (
                   <button
                     key={ quest.question }
+                    onClick={ this.chosenQuestion }
+                    className={ isAnswered
+                      ? this.identifyCorrect(index, 'correct', 'wrong') : 'test' }
                     type="button"
-                    data-testid={ questions[indexClick].correct_answer
-                   === randQuestions[indexClick][index]
-                      ? 'correct-answer' : `wrong-answer-${index}` }
+                    data-testid={
+                      this
+                        .identifyCorrect(index, 'correct-answer', `wrong-answer-${index}`)
+                    }
                   >
-                    {randQuestions[indexClick][index]}
+                    {scrambledQuestions[indexClick][index]}
                   </button>
                 )
               ))}
