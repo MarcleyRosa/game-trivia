@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import md5 from 'crypto-js/md5';
 import '../App.css';
 import getQuestions from '../fetchQuestions';
-import { scoreAction } from '../redux/actions';
+import { assertionsAction, scoreAction } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -15,6 +15,7 @@ class Game extends Component {
     timeCount: 30,
     isDisabled: false,
     numberInterval: 0,
+    correctQuestions: 0,
   };
 
   async componentDidMount() {
@@ -42,14 +43,15 @@ class Game extends Component {
     }), () => {
       this.scrambledQuest();
     });
-    const { indexClick } = this.state;
-    const { history } = this.props;
+    const { indexClick, correctQuestions } = this.state;
+    const { history, resultAssertion } = this.props;
     const maxNumberQuestion = 4;
     if (indexClick === maxNumberQuestion) {
       this.setState({
         indexClick: 0,
 
       });
+      resultAssertion(correctQuestions);
       history.push('/feedback');
     }
     this.timeQuestion();
@@ -115,6 +117,9 @@ class Game extends Component {
         }
         default: return pointFix + (timeCount * easy);
         }
+        this.setState((prevState) => ({
+          correctQuestions: prevState.correctQuestions + 1,
+        }));
       }
     });
   };
@@ -223,6 +228,7 @@ Game.propTypes = {
   email: PropTypes.string.isRequired,
   history: PropTypes.shape([PropTypes.object]).isRequired,
   resultScore: PropTypes.func.isRequired,
+  resultAssertion: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -233,6 +239,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   resultScore: (state) => dispatch(scoreAction(state)),
+  resultAssertion: (state) => dispatch(assertionsAction(state)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
