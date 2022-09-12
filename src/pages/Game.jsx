@@ -106,6 +106,11 @@ class Game extends Component {
     }, timeInterval);
   };
 
+  handleRankingButtonClick = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { player, score, email } = this.props;
     const { questions, indexClick, isAnswered,
@@ -143,7 +148,20 @@ class Game extends Component {
                 )
               ))}
             </div>
-            <button onClick={ this.handleQuest } type="button">Next</button>
+            <button
+              onClick={ this.handleQuest }
+              type="button"
+              data-testid="btn-next"
+            >
+              Next
+            </button>
+            <button
+              onClick={ this.handleRankingButtonClick }
+              type="button"
+              data-testid="btn-ranking"
+            >
+              Ranking
+            </button>
           </div>
 
         ) : (<p>Loading</p>)}
