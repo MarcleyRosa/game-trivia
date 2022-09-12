@@ -39,6 +39,7 @@ class Game extends Component {
     if (indexClick === maxNumberQuestion) {
       this.setState({
         indexClick: 0,
+
       });
     }
   };
