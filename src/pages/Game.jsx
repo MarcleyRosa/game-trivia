@@ -143,7 +143,13 @@ class Game extends Component {
                 )
               ))}
             </div>
-            <button onClick={ this.handleQuest } type="button">Next</button>
+            <button
+              onClick={ this.handleQuest }
+              type="button"
+              data-testid="btn-next"
+            >
+              Next
+            </button>
           </div>
 
         ) : (<p>Loading</p>)}
