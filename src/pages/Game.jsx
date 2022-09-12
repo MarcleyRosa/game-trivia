@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import md5 from 'crypto-js/md5';
 import '../App.css';
 import getQuestions from '../fetchQuestions';
+import { scoreAction } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -13,6 +14,7 @@ class Game extends Component {
     scrambledQuestions: [0],
     timeCount: 30,
     isDisabled: false,
+    numberInterval: 0,
   };
 
   async componentDidMount() {
@@ -31,6 +33,7 @@ class Game extends Component {
   }
 
   handleQuest = () => {
+    this.clearTimeInterval();
     this.setState((prevState) => ({
       indexClick: prevState.indexClick + 1,
       isAnswered: false,
@@ -40,12 +43,14 @@ class Game extends Component {
       this.scrambledQuest();
     });
     const { indexClick } = this.state;
+    const { history } = this.props;
     const maxNumberQuestion = 4;
     if (indexClick === maxNumberQuestion) {
       this.setState({
         indexClick: 0,
 
       });
+      history.push('/feedback');
     }
     this.timeQuestion();
   };
@@ -69,14 +74,49 @@ class Game extends Component {
     return arr;
   };
 
+  clearTimeInterval = () => {
+    const { numberInterval } = this.state;
+    clearInterval(numberInterval);
+
+    this.setState({
+      isDisabled: true,
+    });
+  };
+
   chosenQuestion = ({ target }) => {
-    const { timeCount } = this.state;
+    const { timeCount, questions, indexClick } = this.state;
+    const { resultScore } = this.props;
+
+    this.clearTimeInterval();
     this.setState({
       isAnswered: true,
     }, () => {
-      console.log(target.className);
+      const pointFix = 10;
+      const hard = 3;
+      const medium = 2;
+      const easy = 1;
+
+      if (target.className === 'correct') {
+        switch (questions[indexClick].difficulty) {
+        case 'hard': {
+          const result = pointFix + (timeCount * hard);
+          resultScore(result);
+          break;
+        }
+        case 'medium': {
+          const result = pointFix + (timeCount * medium);
+          resultScore(result);
+          break;
+        }
+        case 'easy': {
+          const result = pointFix + (timeCount * easy);
+          resultScore(result);
+          break;
+        }
+        default: return pointFix + (timeCount * easy);
+        }
+      }
     });
-    console.log(timeCount);
   };
 
   identifyCorrect = (index, correct, wrong) => {
@@ -104,6 +144,9 @@ class Game extends Component {
         timeCount: count,
       });
     }, timeInterval);
+    this.setState({
+      numberInterval: interval,
+    });
   };
 
   handleRankingButtonClick = () => {
@@ -115,6 +158,7 @@ class Game extends Component {
     const { player, score, email } = this.props;
     const { questions, indexClick, isAnswered,
       scrambledQuestions, timeCount, isDisabled } = this.state;
+
     const hash = md5(email).toString();
 
     return (
@@ -148,13 +192,15 @@ class Game extends Component {
                 )
               ))}
             </div>
-            <button
-              onClick={ this.handleQuest }
-              type="button"
-              data-testid="btn-next"
-            >
-              Next
-            </button>
+            { isAnswered && (
+              <button
+                onClick={ this.handleQuest }
+                data-testid="btn-next"
+                type="button"
+              >
+                Next
+
+              </button>)}
             <button
               onClick={ this.handleRankingButtonClick }
               type="button"
@@ -176,7 +222,7 @@ Game.propTypes = {
   score: PropTypes.number.isRequired,
   email: PropTypes.string.isRequired,
   history: PropTypes.shape([PropTypes.object]).isRequired,
-
+  resultScore: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -185,4 +231,8 @@ const mapStateToProps = (state) => ({
   email: state.player.gravatarEmail,
 });
 
-export default connect(mapStateToProps, null)(Game);
+const mapDispatchToProps = (dispatch) => ({
+  resultScore: (state) => dispatch(scoreAction(state)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
