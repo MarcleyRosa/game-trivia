@@ -5,8 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 describe('Test component Login', () => {
     it('Test inputs and button ', async () => {
-
-        const { history } = renderWithRouterAndRedux(<App />)
+        const { history } = renderWithRouterAndRedux(<App />);
 
         const email = 'test@jest.com'
         const name = 'First Player'
@@ -24,10 +23,10 @@ describe('Test component Login', () => {
 
         expect(buttonGame).toBeInTheDocument();
 
+        expect(history.location.pathname).toBe('/');
         userEvent.click(buttonGame);
 
-        await waitFor(() => expect(history.location.pathname).toBe('/game'))
-
+        await waitFor( () => expect(history.location.pathname).toBe('/game'));
     })
     it('Test button game and route', async () => {
         const { history } = renderWithRouterAndRedux(<App />);
@@ -39,5 +38,5 @@ describe('Test component Login', () => {
         userEvent.click(buttonSettings);
 
         expect(history.location.pathname).toBe('/settings')
-    })
+    });
 })

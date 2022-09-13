@@ -21,8 +21,6 @@ const statestateWith2Assertions = {
   }
 }
 
-
-
 describe('Test component Feedback', () => {
   it('Tests the current url', () => {
     const { history } = renderWithRouterAndRedux(<App />, stateWith3Assertions, '/feedback');
@@ -36,18 +34,18 @@ describe('Test component Feedback', () => {
     expect(assertions).toHaveTextContent(3);
   });
 
-  it('Teste if correct message is showed when the player had 3 or more assertions', () => {
+  it('Tests if correct message is showed when the player had 3 or more assertions', () => {
     renderWithRouterAndRedux(<App />, stateWith3Assertions, '/feedback');
     const message = screen.getByTestId("feedback-text");
     expect(message).toHaveTextContent("Well Done!");
   });
 
-  it('Teste if correct message is showed when the player had 3 or more assertions', () => {
+  it('Tests if correct message is showed when the player had 3 or more assertions', () => {
     renderWithRouterAndRedux(<App />, statestateWith2Assertions, '/feedback');
     const message = screen.getByTestId("feedback-text");
     expect(message).toHaveTextContent("Could be better...");
   });
-  it('', () => {
+  it('Tests the play again button', () => {
     const { history } = renderWithRouterAndRedux(<App />, statestateWith2Assertions, '/feedback');
     const buttonPlayAgain = screen.getByRole('button', { name: /play again/i });
     expect(buttonPlayAgain).toBeInTheDocument();
@@ -55,5 +53,15 @@ describe('Test component Feedback', () => {
     userEvent.click(buttonPlayAgain);
 
     expect(history.location.pathname).toBe('/');
+  });
+
+  it('Tests the ranking button', () => {
+    const { history } = renderWithRouterAndRedux(<App />, statestateWith2Assertions, '/feedback');
+    const buttonRanking = screen.getByRole('button', { name: /ranking/i });
+    expect(buttonRanking).toBeInTheDocument();
+
+    userEvent.click(buttonRanking);
+
+    expect(history.location.pathname).toBe('/ranking');
   });
 });
