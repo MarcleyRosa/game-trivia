@@ -33,6 +33,7 @@ class Ranking extends Component {
     const { ranking } = this.state;
     return (
       <section>
+        <h1 data-testid="ranking-title">Ranking</h1>
         {
           ranking.map((player, index) => (
             <section key={ index }>

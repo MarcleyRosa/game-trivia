@@ -2,6 +2,7 @@ export const LOG_IN = 'LOG_IN';
 export const NEW_SCORE = 'NEW_SCORE';
 export const PLAYERS_INFO = 'PLAYERS_INFO';
 export const RESET_SCORE = 'RESET_SCORE';
+export const NEW_ASSERTIONS = 'NEW_ASSERTIONS';
 
 export const loginAction = (name, email) => ({
   type: LOG_IN,
@@ -23,4 +24,9 @@ export const rankingAction = (player, picture, score) => ({
 
 export const resetScoreAction = () => ({
   type: RESET_SCORE,
+});
+
+export const assertionsAction = (state) => ({
+  type: NEW_ASSERTIONS,
+  state,
 });
