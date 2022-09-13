@@ -9,13 +9,16 @@ class Ranking extends Component {
 
   render() {
     return (
-      <button
-        type="button"
-        data-testid="btn-go-home"
-        onClick={ this.handleClick }
-      >
-        Login
-      </button>
+      <div>
+        <p data-testid="ranking-title">Ranking</p>
+        <button
+          type="button"
+          data-testid="btn-go-home"
+          onClick={ this.handleClick }
+        >
+          Login
+        </button>
+      </div>
     );
   }
 }
