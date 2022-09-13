@@ -1,6 +1,6 @@
 import { LOG_IN, NEW_ASSERTIONS, NEW_SCORE } from '../actions';
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   name: '',
   assertions: 0,
   score: 0,

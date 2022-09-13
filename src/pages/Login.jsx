@@ -10,7 +10,7 @@ class Login extends Component {
     player: '',
     playerEmail: '',
     isDisabled: true,
-    token: '',
+    // token: '',
     shouldRedirect: false,
   };
 
@@ -37,7 +37,7 @@ class Login extends Component {
     localStorage.setItem('token', token);
 
     this.setState({
-      token,
+      // token,
       shouldRedirect: true,
     });
   };
@@ -48,8 +48,9 @@ class Login extends Component {
   };
 
   render() {
-    const { player, playerEmail, isDisabled, shouldRedirect, token } = this.state;
-    console.log(token);
+    // const { player, playerEmail, isDisabled, shouldRedirect, token } = this.state;
+    const { player, playerEmail, isDisabled, shouldRedirect } = this.state;
+    // console.log(token);
 
     return (
       <form>
