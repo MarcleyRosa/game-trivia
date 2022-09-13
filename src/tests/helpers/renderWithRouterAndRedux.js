@@ -6,9 +6,8 @@ import { Provider } from 'react-redux';
 import {  legacy_createStore as createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from '../../redux/reducers';
-import { INITIAL_STATE } from '../../redux/reducers/playerReducer';
 
-export const renderWithRouterAndRedux = ( component, { initialState = INITIAL_STATE, route = '/' } = {}) => {
+export const renderWithRouterAndRedux = (component, initialState, route = '/') => {
   const store = createStore(reducer, initialState, applyMiddleware(thunk));
   const history = createMemoryHistory({ initialEntries: [route] });
 
