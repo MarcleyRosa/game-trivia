@@ -50,7 +50,7 @@ describe('Test component Ranking', () => {
     expect(rankingTitle).toBeInTheDocument();
     expect(rankingButton).toBeInTheDocument();
   });
-  it('tests if it contains an image on the screen', () => {
+  it('test button functionality', () => {
     const initialState = {
       player: {
         name: 'Lucas',
