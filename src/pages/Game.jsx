@@ -99,6 +99,9 @@ class Game extends Component {
       const easy = 1;
 
       if (target.className === 'correct') {
+        this.setState((prevState) => ({
+          correctQuestions: prevState.correctQuestions + 1,
+        }));
         switch (questions[indexClick].difficulty) {
         case 'hard': {
           const result = pointFix + (timeCount * hard);
@@ -110,16 +113,12 @@ class Game extends Component {
           resultScore(result);
           break;
         }
-        case 'easy': {
+        default: {
           const result = pointFix + (timeCount * easy);
           resultScore(result);
           break;
         }
-        default: return pointFix + (timeCount * easy);
         }
-        this.setState((prevState) => ({
-          correctQuestions: prevState.correctQuestions + 1,
-        }));
       }
     });
   };
@@ -171,7 +170,7 @@ class Game extends Component {
         <img src={ `https://www.gravatar.com/avatar/${hash}` } alt="player" data-testid="header-profile-picture" />
         <p data-testid="header-player-name">{`Olá, ${player}`}</p>
         <p data-testid="header-score">{`Placar: ${score}`}</p>
-        {questions.length !== 0 ? (
+        {questions.length ? (
           <div>
             <p data-testid="question-category">{questions[indexClick].category}</p>
             <p data-testid="question-text">{questions[indexClick].question}</p>

@@ -38,5 +38,11 @@ describe('Test component Login', () => {
         userEvent.click(buttonSettings);
 
         expect(history.location.pathname).toBe('/settings')
+
+        const buttonBack = screen.getByRole('button', { name: 'Voltar'})
+
+        expect(buttonBack).toBeInTheDocument();
+
+        userEvent.click(buttonBack);
     });
 })
