@@ -24,7 +24,7 @@ class Settings extends Component {
 }
 
 Settings.propTypes = {
-  history: PropTypes.func.isRequired,
+  history: PropTypes.shape([PropTypes.object]).isRequired,
 };
 
 export default Settings;
