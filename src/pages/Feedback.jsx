@@ -2,14 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import md5 from 'crypto-js/md5';
 import Header from '../components/Header';
+import { rankingAction, resetScoreAction } from '../redux/actions';
 
 class Feedback extends Component {
   state = {
     shouldRedirect: false,
   };
 
+  componentDidMount() {
+    this.savePlayersInfo();
+  }
+
+  savePlayersInfo = () => {
+    const { name, gravatarEmail, score } = this.props;
+    const { dispatch } = this.props;
+    const picture = `https://www.gravatar.com/avatar/${md5(gravatarEmail).toString()}`;
+    dispatch(rankingAction(name, picture, score));
+  };
+
   onClick = () => {
+    const { dispatch } = this.props;
+    dispatch(resetScoreAction());
     this.setState({ shouldRedirect: true });
   };
 
@@ -54,12 +69,17 @@ class Feedback extends Component {
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  gravatarEmail: PropTypes.string.isRequired,
   history: PropTypes.shape([PropTypes.object]).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   score: state.player.score,
   assertions: state.player.assertions,
+  gravatarEmail: state.player.gravatarEmail,
+  name: state.player.name,
 });
 
 export default connect(mapStateToProps, null)(Feedback);
