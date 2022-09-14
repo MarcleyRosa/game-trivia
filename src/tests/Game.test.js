@@ -75,17 +75,18 @@ const questionsData = {
       assertions: 0,
       score: 0,
       gravatarEmail: 'player@player.com',
+      ranking: [],
     }
   } 
 
 describe('Tests component Game.jsx', () => {
 
+    jest.setTimeout(38000)
     beforeEach(() => {
         global.fetch = jest.fn(async () => Promise.resolve({
             json: async () => Promise.resolve(questionsData),
         }));
     })
-    afterEach(() => jest.setTimeout(31000))
     it('Tests info player and questions', async () => {
         const { history } = renderWithRouterAndRedux(<App />, initialState, '/game')
         const loading = screen.getByText('Loading!')
@@ -131,12 +132,6 @@ describe('Tests component Game.jsx', () => {
         userEvent.click(buttonRanking);
 
         expect(history.location.pathname).toBe('/ranking')
-
-        const textRanking = screen.getByText('Ranking');
-        const buttonLogin = screen.getByRole('button', { name: 'Login'})
-
-        expect(textRanking).toBeInTheDocument();
-        expect(buttonLogin).toBeInTheDocument();
 
     })
     it('Tests correct questions button', async () => {
@@ -239,15 +234,14 @@ describe('Tests component Game.jsx', () => {
         expect(history.location.pathname).toBe('/');
     })
 
-    // it('', async () => {
-    // renderWithRouterAndRedux(<App />, initialState, '/game')
-    // const loading = screen.getByText('Loading!')
-    // await waitForElementToBeRemoved(loading);
+    it('aw', async () => {
+    renderWithRouterAndRedux(<App />, initialState, '/game')
+    const loading = screen.getByText('Loading!')
+    await waitForElementToBeRemoved(loading);
 
-    // // jest.setTimeout(31000);
+    const textTimer = await screen.findByText('0', {}, {timeout: 31000});
+
+    expect(textTimer).toBeInTheDocument();
     
-    //     // expect(screen.getByText('29').toBeInTheDocument());
-   
-
-    // })
+    })
 })

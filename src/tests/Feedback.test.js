@@ -9,6 +9,7 @@ const stateWith3Assertions = {
     assertions: 3,
     score: 140,
     gravatarEmail: 'jose@trybe.com',
+    ranking: [],
   }
 }
 
@@ -18,6 +19,7 @@ const statestateWith2Assertions = {
     assertions: 2,
     score: 140,
     gravatarEmail: 'jose@trybe.com',
+    ranking: [],
   }
 }
 
